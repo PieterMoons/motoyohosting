@@ -20,14 +20,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-uo=8n^bbtto&)&8*!mab%6au&ngk@t+i!9si)19r^%dbbc#9#r'
+# SECURITY WARNING: keep the secret key used in production secret
+try:
+    SECRET_KEY = os.environ["SECRET_KEY"]
+except KeyError as e:
+    raise RuntimeError("Could not find a SECRET_KEY in environment") from e
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['www.motoyohosting.uk']
+CSRF_TRUSTED_ORIGINS = ['https://www.motoyohosting.uk']
 
 # Application definition
 
@@ -62,7 +65,7 @@ ROOT_URLCONF = 'authsysproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR.joinpath('users/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -133,7 +136,7 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
+    os.path.join(BASE_DIR, 'users/static')
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
